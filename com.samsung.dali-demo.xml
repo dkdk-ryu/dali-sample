@@ -6,7 +6,22 @@
 	<author email="jonghyun.ho@samsung.com" href="www.samsung.com">Jonghyun Ho</author>
 	<description>DALi demo Application</description>
 
-	<ui-application appid="hello-world.example" exec="/usr/apps/com.samsung.dali-demo/bin/hello-world.example" nodisplay="true" multiple="false" type="c++app" taskmanage="true">
-		<label>Hello World</label>
+	<ui-application appid="com.samsung.dali-demo" exec="/usr/apps/com.samsung.dali-demo/bin/hello-world.example" nodisplay="false" multiple="false" type="c++app" taskmanage="true">
+                <icon>/usr/share/icons/com.samsung.dali-demo.png</icon>
+		<label>Dali demo</label>
 	</ui-application>
+
+        <privileges>
+                <privilege>http://tizen.org/privilege/mediastorage</privilege>
+                <privilege>http://tizen.org/privilege/externalstorage</privilege>
+                <privilege>http://tizen.org/privilege/externalstorage.appdata</privilege>
+                <privilege>http://tizen.org/privilege/unlimitedstorage</privilege>
+                <privilege>http://tizen.org/privilege/filesystem.write</privilege>
+                <privilege>http://tizen.org/privilege/filesystem.read</privilege>
+                <privilege>http://tizen.org/privilege/download</privilege>
+                <privilege>http://tizen.org/privilege/internet</privilege>
+                <privilege>http://tizen.org/privilege/network.get</privilege>
+                <privilege>http://tizen.org/privilege/network.profile</privilege>
+                <privilege>http://tizen.org/privilege/network.set</privilege>
+        </privileges>
 </manifest>

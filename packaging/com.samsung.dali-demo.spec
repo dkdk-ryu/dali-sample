@@ -19,18 +19,16 @@ BuildRequires:  pkgconfig(capi-media-player)
 BuildRequires:  pkgconfig(dlog)
 BuildRequires:  gettext-tools
 BuildRequires:  pkgconfig(dali-core)
+BuildRequires:  pkgconfig(dali-adaptor)
 BuildRequires:  pkgconfig(dali-toolkit)
-BuildRequires: pkgconfig(ecore-wayland)
-BuildRequires: pkgconfig(ecore)
-BuildRequires: pkgconfig(vd-win-util)
+#BuildRequires: pkgconfig(ecore-wayland)
+#BuildRequires: pkgconfig(ecore)
+#BuildRequires: pkgconfig(vd-win-util)
 
 #need libtzplatform-config for directory if tizen version is 3.x
 %if 0%{?tizen_version_major} >= 3
 BuildRequires:  pkgconfig(libtzplatform-config)
 %endif
-
-# DALi C++ applications always run on dali-adaptor.
-BuildRequires:  pkgconfig(dali-adaptor)
 
 %description
 The OpenGLES Canvas Core Demo is a collection of examples and demonstrations
@@ -96,8 +94,8 @@ cp -f %{_builddir}/%{name}-%{version}/%{name}.rule %{buildroot}%{smack_rule_dir}
 %endif
 
 # LICENSE
-mkdir -p %{buildroot}/usr/share/license
-cp -af %{_builddir}/%{name}-%{version}/LICENSE %{buildroot}/usr/share/license/%{name}
+#mkdir -p %{buildroot}/usr/share/license
+#cp -af %{_builddir}/%{name}-%{version}/LICENSE %{buildroot}/usr/share/license/%{name}
 
 ##############################
 # Post Install
@@ -124,4 +122,5 @@ exit 0
 %if 0%{?enable_dali_smack_rules} && !%{with wayland}
 %config %{smack_rule_dir}/%{name}.rule
 %endif
-%{_datadir}/license/%{name}
+#%{_datadir}/license/%{name}
+%license LICENSE

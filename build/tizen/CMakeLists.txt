@@ -57,11 +57,11 @@ CONFIGURE_FILE( resources-location.in ${DEMO_SHARED}/resources-location.cpp )
 
 SET(PKG_LIST dali-core
              dali-adaptor
-             dali-toolkit
-	     dlog
-	     ecore
-	     ecore-wayland
-	     vd-win-util)
+             dali-toolkit)
+#	     dlog
+#	     ecore
+#	     ecore-wayland
+#	     vd-win-util)
 
 INCLUDE(FindPkgConfig)
 pkg_check_modules(REQUIRED_PKGS REQUIRED ${PKG_LIST})
