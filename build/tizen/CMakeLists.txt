@@ -57,8 +57,8 @@ CONFIGURE_FILE( resources-location.in ${DEMO_SHARED}/resources-location.cpp )
 
 SET(PKG_LIST dali-core
              dali-adaptor
-             dali-toolkit)
-#	     dlog
+             dali-toolkit
+	     dlog)
 #	     ecore
 #	     ecore-wayland
 #	     vd-win-util)
