@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,50 +25,46 @@ using Dali::Toolkit::TextLabel;
 class HelloWorldController : public ConnectionTracker
 {
 public:
-
-  HelloWorldController( Application& application )
-  : mApplication( application )
+  HelloWorldController(Application& application)
+  : mApplication(application)
   {
     // Connect to the Application's Init signal
-    mApplication.InitSignal().Connect( this, &HelloWorldController::Create );
+    mApplication.InitSignal().Connect(this, &HelloWorldController::Create);
   }
 
-  ~HelloWorldController()
-  {
-    // Nothing to do here;
-  }
+  ~HelloWorldController() = default; // Nothing to do in destructor
 
   // The Init signal is received once (only) during the Application lifetime
-  void Create( Application& application )
+  void Create(Application& application)
   {
-    // Get a handle to the stage
-    Stage stage = Stage::GetCurrent();
-    stage.SetBackgroundColor( Color::WHITE );
+    // Get a handle to the window
+    Window window = application.GetWindow();
+    window.SetBackgroundColor(Color::WHITE);
 
-    TextLabel textLabel = TextLabel::New( "Hello World" );
-    textLabel.SetAnchorPoint( AnchorPoint::TOP_LEFT );
-    textLabel.SetName( "helloWorldLabel" );
-    stage.Add( textLabel );
+    TextLabel textLabel = TextLabel::New("Hello World");
+    textLabel.SetProperty(Actor::Property::ANCHOR_POINT, AnchorPoint::TOP_LEFT);
+    textLabel.SetProperty(Dali::Actor::Property::NAME, "helloWorldLabel");
+    window.Add(textLabel);
 
-    // Respond to a click anywhere on the stage
-    stage.GetRootLayer().TouchSignal().Connect( this, &HelloWorldController::OnTouch );
+    // Respond to a touch anywhere on the window
+    window.GetRootLayer().TouchedSignal().Connect(this, &HelloWorldController::OnTouch);
 
     // Respond to key events
-    stage.KeyEventSignal().Connect( this, &HelloWorldController::OnKeyEvent );
+    window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
   }
 
-  bool OnTouch( Actor actor, const TouchData& touch )
+  bool OnTouch(Actor actor, const TouchEvent& touch)
   {
     // quit the application
     mApplication.Quit();
     return true;
   }
 
-  void OnKeyEvent( const KeyEvent& event )
+  void OnKeyEvent(const KeyEvent& event)
   {
-    if( event.state == KeyEvent::Down )
+    if(event.GetState() == KeyEvent::DOWN)
     {
-      if ( IsKey( event, Dali::DALI_KEY_ESCAPE ) || IsKey( event, Dali::DALI_KEY_BACK ) )
+      if(IsKey(event, Dali::DALI_KEY_ESCAPE) || IsKey(event, Dali::DALI_KEY_BACK))
       {
         mApplication.Quit();
       }
@@ -76,13 +72,13 @@ public:
   }
 
 private:
-  Application&  mApplication;
+  Application& mApplication;
 };
 
-int DALI_EXPORT_API main( int argc, char **argv )
+int DALI_EXPORT_API main(int argc, char** argv)
 {
-  Application application = Application::New( &argc, &argv );
-  HelloWorldController test( application );
+  Application          application = Application::New(&argc, &argv);
+  HelloWorldController test(application);
   application.MainLoop();
   return 0;
 }
