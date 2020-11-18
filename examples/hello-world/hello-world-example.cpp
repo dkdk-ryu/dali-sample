@@ -14,11 +14,15 @@
  * limitations under the License.
  *
  */
-
+#include <cairo.h>
 #include <dali-toolkit/dali-toolkit.h>
 
 using namespace Dali;
 using Dali::Toolkit::TextLabel;
+
+#define WIDTH 600
+#define HEIGHT 275
+#define STRIDE (WIDTH * 4)
 
 // This example shows how to create and display Hello World! using a simple TextActor
 //
@@ -51,6 +55,33 @@ public:
 
     // Respond to key events
     window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
+
+    unsigned char image[STRIDE*HEIGHT];
+    cairo_surface_t *surface;
+    cairo_surface_t *imagePng;
+    cairo_t *cr;
+
+    surface = cairo_image_surface_create_for_data (image, CAIRO_FORMAT_ARGB32,
+						   WIDTH, HEIGHT, STRIDE);
+
+    cr = cairo_create (surface);
+
+    // cairo_arc (cr, 128.0, 128.0, 76.8, 0, 2*M_PI);
+    // cairo_clip (cr);
+    // cairo_new_path (cr); /* path not consumed by clip()*/
+
+    imagePng = cairo_image_surface_create_from_png ("stars.png");
+    // w = cairo_image_surface_get_width (image);
+    // h = cairo_image_surface_get_height (image);
+
+    cairo_set_source_surface (cr, imagePng, 0, 0);
+    cairo_paint (cr);
+
+    cairo_surface_write_to_png (surface, "image.png");
+
+    cairo_destroy (cr);
+
+    cairo_surface_destroy (surface);
   }
 
   bool OnTouch(Actor actor, const TouchEvent& touch)
