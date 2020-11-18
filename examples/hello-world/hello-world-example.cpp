@@ -56,32 +56,41 @@ public:
     // Respond to key events
     window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
 
-    unsigned char image[STRIDE*HEIGHT];
-    cairo_surface_t *surface;
-    cairo_surface_t *imagePng;
-    cairo_t *cr;
+    unsigned char image[STRIDE * HEIGHT];
+    unsigned char image2[STRIDE * HEIGHT];
 
-    surface = cairo_image_surface_create_for_data (image, CAIRO_FORMAT_ARGB32,
-						   WIDTH, HEIGHT, STRIDE);
+    cairo_surface_t *surface, *surface2;
+    cairo_surface_t *imagePng, *imagePng2;
+    cairo_t *        cr, *cr2;
 
-    cr = cairo_create (surface);
+    surface = cairo_image_surface_create_for_data(image, CAIRO_FORMAT_ARGB32, WIDTH, HEIGHT, STRIDE);
+
+    cr = cairo_create(surface);
 
     // cairo_arc (cr, 128.0, 128.0, 76.8, 0, 2*M_PI);
     // cairo_clip (cr);
     // cairo_new_path (cr); /* path not consumed by clip()*/
 
-    imagePng = cairo_image_surface_create_from_png ("stars.png");
+    imagePng = cairo_image_surface_create_from_png("stars.png");
     // w = cairo_image_surface_get_width (image);
     // h = cairo_image_surface_get_height (image);
 
-    cairo_set_source_surface (cr, imagePng, 0, 0);
-    cairo_paint (cr);
+    cairo_set_source_surface(cr, imagePng, 0, 0);
+    cairo_paint(cr);
 
-    cairo_surface_write_to_png (surface, "image.png");
+    cairo_surface_write_to_png(surface, "image.png");
+    // ---------------------------------------------
+    surface2  = cairo_image_surface_create_for_data(image2, CAIRO_FORMAT_ARGB32, WIDTH, HEIGHT, STRIDE);
+    cr2       = cairo_create(surface2);
+    imagePng2 = cairo_image_surface_create_from_png("stars.png");
+    cairo_set_source_surface(cr2, imagePng2, 0, 0);
+    cairo_paint(cr2);
+    cairo_surface_write_to_png(surface2, "image2.png");
 
-    cairo_destroy (cr);
+    // ----------------------------------------------------------
+    cairo_destroy(cr);
 
-    cairo_surface_destroy (surface);
+    cairo_surface_destroy(surface);
   }
 
   bool OnTouch(Actor actor, const TouchEvent& touch)
