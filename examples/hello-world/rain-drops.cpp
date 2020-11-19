@@ -262,9 +262,9 @@ void RainDrops::updateDroplets(double timeScale)
   cairo_restore(mCtx);
 }
 
-vector<Drop> RainDrops::updateRain(double timeScale)
+vector<Drop*> RainDrops::updateRain(double timeScale)
 {
-  vector<Drop> rainDrops;
+  vector<Drop*> rainDrops;
 
   if(mOptions.raining)
   {
@@ -278,13 +278,13 @@ vector<Drop> RainDrops::updateRain(double timeScale)
       { //createDrop
         if(mDrops.size() < mOptions.maxDrops * areaMultiplier())
         {
-          Drop rainDrop;
-          rainDrop.x        = random(mWidth / mScale, 0, 1);
-          rainDrop.y        = random((mHeight / mScale) * mOptions.spawnArea[0], (mHeight / mScale) * mOptions.spawnArea[1], 1);
-          rainDrop.r        = r;
-          rainDrop.momentum = 1 + ((r - mOptions.minR) * 0.1) + random(2, 0, 1);
-          rainDrop.spreadX  = 1.5;
-          rainDrop.spreadY  = 1.5;
+          Drop* rainDrop     = new Drop();
+          rainDrop->x        = random(mWidth / mScale, 0, 1);
+          rainDrop->y        = random((mHeight / mScale) * mOptions.spawnArea[0], (mHeight / mScale) * mOptions.spawnArea[1], 1);
+          rainDrop->r        = r;
+          rainDrop->momentum = 1 + ((r - mOptions.minR) * 0.1) + random(2, 0, 1);
+          rainDrop->spreadX  = 1.5;
+          rainDrop->spreadY  = 1.5;
           rainDrops.push_back(rainDrop);
         }
       }
@@ -304,7 +304,6 @@ bool compare(Drop a, Drop b)
   // { //이름 다르면, 이름 사전순
   //   return a.name < b.name;
   // }
-
 
   // TODO: Can I use member variable?
   // TODO: equal?
@@ -364,8 +363,7 @@ void RainDrops::updateDrops(double timeScale)
             trailDrop.y       = mDrops[i].y - (mDrops[i].r * 0.01);
             trailDrop.r       = mDrops[i].r * random(mOptions.trailScaleRange[0], mOptions.trailScaleRange[1], 1);
             trailDrop.spreadY = mDrops[i].momentum * 0.1;
-            //TODO: pointer.
-            // trailDrop.parent  = mDrops[i];
+            trailDrop.parent  = mDrops[i];
             newDrops.push_back(trailDrop);
 
             mDrops[i].r *= pow(0.97, timeScale);
@@ -458,16 +456,17 @@ void RainDrops::update()
 {
   clearCanvas();
 
-  milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+  // milliseconds now = duration_cast<milliseconds>(system_clock::now()).count();
+  uint64_t now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
   if(mLastRenderTime == 0)
   {
     mLastRenderTime = now;
   }
 
-  milliseconds deltaT = now - mLastRenderTime;
+  uint64_t deltaT = now - mLastRenderTime;
 
-  long int timeScale = deltaT / ((1 / 60) * 1000);
+  double timeScale = deltaT / ((1. / 60) * 1000);
   if(timeScale > 1.1)
   {
     timeScale = 1.1;

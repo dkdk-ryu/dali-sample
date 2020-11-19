@@ -41,7 +41,7 @@ struct RainOptions
     raining                          = true;
     globalTimeScale                  = 1;
     trailRate                        = 1;
-    autoShrink                        = true;
+    autoShrink                       = true;
     spawnArea[0]                     = -0.1;
     spawnArea[1]                     = 0.95;
     trailScaleRange[0]               = 0.2;
@@ -95,20 +95,20 @@ public:
   void update();
 
 private:
-  void         init();
-  int          deltaR();
-  double       area();
-  double       areaMultiplier();
-  double       random(double from, double to, unsigned char interpolationType);
-  bool         chance(double c);
-  void         updateDroplets(double timeScale);
-  void         updateDrops(double timeScale);
-  void         renderDropsGfx();
-  void         clearCanvas();
-  double       getRandom();
-  void         drawDrop(Drop drop);
-  void         drawDroplet(int x, int y, double r);
-  vector<Drop> updateRain(double timeScale);
+  void          init();
+  int           deltaR();
+  double        area();
+  double        areaMultiplier();
+  double        random(double from, double to, unsigned char interpolationType);
+  bool          chance(double c);
+  void          updateDroplets(double timeScale);
+  void          updateDrops(double timeScale);
+  void          renderDropsGfx();
+  void          clearCanvas();
+  double        getRandom();
+  void          drawDrop(Drop drop);
+  void          drawDroplet(int x, int y, double r);
+  vector<Drop*> updateRain(double timeScale);
 
 private:
   int   mWidth;
@@ -117,13 +117,13 @@ private:
 
   RainOptions mOptions;
   //TODO: init value
-  int                  mDropletsPixelDensity      = 1;
-  int                  mDropletsCounter           = 0;
-  double               mTextureCleaningIterations = 0;
-  chrono::milliseconds mLastRenderTime;
-  unsigned char*       mCanvas;
-  cairo_surface_t*     mSurface;
-  cairo_t*             mCtx;
+  int              mDropletsPixelDensity      = 1;
+  int              mDropletsCounter           = 0;
+  double           mTextureCleaningIterations = 0;
+  uint64_t         mLastRenderTime;
+  unsigned char*   mCanvas;
+  cairo_surface_t* mSurface;
+  cairo_t*         mCtx;
 
   unsigned char*   mDropletsCanvas;
   cairo_surface_t* mDropletsSurface;
@@ -131,7 +131,7 @@ private:
 
   unsigned char* mClearDropletsGfx; //canvas - //clearcanvas 한번만 그리고 더이상 업데이트할일이 없어서 ctx는 따로 저장하지 않음.
 
-  vector<Drop>             mDrops;
+  vector<Drop*>            mDrops;
   vector<unsigned char*>   mDropsGfx;
   vector<cairo_surface_t*> mDropsSurfaces;
   cairo_surface_t*         mDropAlpha;
