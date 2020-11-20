@@ -79,7 +79,7 @@ void RainDrops::renderDropsGfx()
     // alpha
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_OVER);
     cairo_set_source_surface(dropCtx, mDropAlpha, 0, 0);
-
+    cairo_paint(dropCtx);
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_IN);
     cairo_set_source_surface(dropCtx, dropBufferSurface, 0, 0);
     cairo_paint(dropCtx);
