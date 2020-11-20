@@ -88,6 +88,7 @@ void RainDrops::renderDropsGfx()
     cairo_surface_destroy(dropSurface);
 
     mDropsGfx.push_back(dropCanvas);
+    //TODO: this surface was already destroyed
     mDropsSurfaces.push_back(dropSurface);
   }
 
