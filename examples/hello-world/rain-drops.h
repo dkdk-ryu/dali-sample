@@ -92,7 +92,7 @@ class RainDrops
 {
 public:
   RainDrops(int width, int height, float scale, RainOptions options);
-  void update();
+  void          update();
 
 private:
   void          init();
@@ -106,7 +106,8 @@ private:
   void          renderDropsGfx();
   void          clearCanvas();
   double        getRandom();
-  void          drawDrop(Drop drop);
+  void          drawDrop(cairo_t* ctx, Drop* drop);
+  void          clearDroplets(double x, double y, double r = 30);
   void          drawDroplet(int x, int y, double r);
   vector<Drop*> updateRain(double timeScale);
 
@@ -129,7 +130,9 @@ private:
   cairo_surface_t* mDropletsSurface;
   cairo_t*         mDropletsCtx;
 
-  unsigned char* mClearDropletsGfx; //canvas - //clearcanvas 한번만 그리고 더이상 업데이트할일이 없어서 ctx는 따로 저장하지 않음.
+  unsigned char*   mClearDropletsGfx; //canvas - //clearcanvas 한번만 그리고 더이상 업데이트할일이 없어서 ctx는 따로 저장하지 않음.
+  cairo_surface_t* mClearDropletsSurface;
+  cairo_t*         mClearDropletsCtx;
 
   vector<Drop*>            mDrops;
   vector<unsigned char*>   mDropsGfx;
