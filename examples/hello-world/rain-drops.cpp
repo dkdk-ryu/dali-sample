@@ -147,8 +147,8 @@ void RainDrops::renderDropsGfx()
   cairo_paint(mClearDropletsCtx);
   cairo_status_t status = cairo_surface_write_to_png(mClearDropletsSurface, "ClearDroplets.png");
 
-  cairo_destroy(mClearDropletsCtx);
-  cairo_surface_destroy(mClearDropletsSurface);
+  // cairo_destroy(mClearDropletsCtx);
+  // cairo_surface_destroy(mClearDropletsSurface);
 }
 
 void RainDrops::clearCanvas()
@@ -543,16 +543,8 @@ void RainDrops::update()
 
   mPngIndex++;
   string str = "canvas" + std::to_string(mPngIndex) + ".png";
-  // // // string str = string("canvas") + std::to_string(mPngIndex) +string(".png");
-  // // cairo_save(mPngCtx);
-  // // cairo_set_source_surface(mPngCtx, mSurface, 0, 0);
-  // // cairo_paint(mPngCtx);
   std::cout << str << std::endl;
-  // cairo_surface_write_to_png(mPngSurface, str.c_str());
-  // cairo_restore(mPngCtx);
   cairo_save(mCtx);
   cairo_surface_write_to_png(mSurface, str.c_str());
   cairo_restore(mCtx);
-
-  // requestAnimationFrame(this.update.bind(this));
 }
