@@ -92,7 +92,7 @@ class RainDrops
 {
 public:
   RainDrops(int width, int height, float scale, RainOptions options);
-  void          update();
+  void update();
 
 private:
   void          init();
@@ -118,13 +118,19 @@ private:
 
   RainOptions mOptions;
   //TODO: init value
-  int              mDropletsPixelDensity      = 1;
-  int              mDropletsCounter           = 0;
-  double           mTextureCleaningIterations = 0;
+  int              mDropletsPixelDensity;
+  int              mDropletsCounter;
+  double           mTextureCleaningIterations;
   uint64_t         mLastRenderTime;
   unsigned char*   mCanvas;
   cairo_surface_t* mSurface;
   cairo_t*         mCtx;
+
+  //forPNG
+  uint32_t         mPngIndex;
+  unsigned char*   mPngCanvas;
+  cairo_surface_t* mPngSurface;
+  cairo_t*         mPngCtx;
 
   unsigned char*   mDropletsCanvas;
   cairo_surface_t* mDropletsSurface;
