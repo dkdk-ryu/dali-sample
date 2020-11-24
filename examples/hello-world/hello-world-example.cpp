@@ -70,7 +70,7 @@ public:
     options.collisionBoostMultiplier = 0.28;
     mRainDrops                       = new RainDrops(1000, 1000, 1, options);
 
-    mTimer = Timer::New(1000); // ms
+    mTimer = Timer::New(100); // ms
     mTimer.TickSignal().Connect(this, &HelloWorldController::OnTimer);
     mTimer.Start();
   }

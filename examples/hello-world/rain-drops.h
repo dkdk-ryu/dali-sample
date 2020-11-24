@@ -128,9 +128,6 @@ private:
 
   //forPNG
   uint32_t         mPngIndex;
-  unsigned char*   mPngCanvas;
-  cairo_surface_t* mPngSurface;
-  cairo_t*         mPngCtx;
 
   unsigned char*   mDropletsCanvas;
   cairo_surface_t* mDropletsSurface;
