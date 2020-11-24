@@ -80,15 +80,18 @@ void RainDrops::renderDropsGfx()
     cairo_set_source_rgba(dropBufferCtx, 0.0, 0.0, 0.0, 0.0);
     cairo_set_operator(dropBufferCtx, CAIRO_OPERATOR_SOURCE);
     cairo_paint(dropBufferCtx);
-    status = cairo_surface_write_to_png(dropBufferSurface, "clear.png");
-    cairo_restore(dropBufferCtx);
+    // status = cairo_surface_write_to_png(dropBufferSurface, "clear.png");
+    // cairo_restore(dropBufferCtx);
 
     // color
     cairo_save(dropBufferCtx);
     cairo_set_operator(dropBufferCtx, CAIRO_OPERATOR_OVER);
+    // TODO:
+    cairo_scale(dropBufferCtx, 0.5, 0.5);
     cairo_set_source_surface(dropBufferCtx, mDropColor, 0, 0);
     cairo_paint(dropBufferCtx);
-    status = cairo_surface_write_to_png(dropBufferSurface, "color.png");
+    // string colorStr = "color" + std::to_string(i) + ".png";
+    // status          = cairo_surface_write_to_png(dropBufferSurface, colorStr.c_str());
 
     // blue overlay, for depth
     cairo_set_operator(dropBufferCtx, CAIRO_OPERATOR_SCREEN);
@@ -104,14 +107,21 @@ void RainDrops::renderDropsGfx()
     cairo_set_source_rgba(dropCtx, 0.0, 0.0, 0.0, 0.0);
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_SOURCE);
     cairo_paint(dropCtx);
+    // string tempStr = "alphaC" + std::to_string(i) + ".png";
+    // cairo_surface_write_to_png(dropSurface, tempStr.c_str());
     //
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_OVER);
+    cairo_scale(dropCtx, 0.5, 0.5);
     cairo_set_source_surface(dropCtx, mDropAlpha, 0, 0);
     cairo_paint(dropCtx);
+    // tempStr = "alphaI" + std::to_string(i) + ".png";
+    // cairo_surface_write_to_png(dropSurface, tempStr.c_str());
+
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_IN);
+    cairo_scale(dropCtx, 2.0, 2.0);
     cairo_set_source_surface(dropCtx, dropBufferSurface, 0, 0);
     cairo_paint(dropCtx);
-    // string tempStr = "alpha" + std::to_string(i) + ".png";
+    // string tempStr = "alphaD" + std::to_string(i) + ".png";
     // cairo_surface_write_to_png(dropSurface, tempStr.c_str());
 
     cairo_destroy(dropCtx);
@@ -145,7 +155,7 @@ void RainDrops::renderDropsGfx()
   cairo_new_path(mClearDropletsCtx);
   cairo_set_source_rgba(mClearDropletsCtx, 0.0, 0.0, 0.0, 1.0);
   cairo_paint(mClearDropletsCtx);
-  cairo_status_t status = cairo_surface_write_to_png(mClearDropletsSurface, "ClearDroplets.png");
+  // cairo_status_t status = cairo_surface_write_to_png(mClearDropletsSurface, "ClearDroplets.png");
 
   // cairo_destroy(mClearDropletsCtx);
   // cairo_surface_destroy(mClearDropletsSurface);
@@ -383,6 +393,7 @@ void RainDrops::updateDrops(double timeScale)
   // newDrops.insert(newDrops.end(), rainDrops.begin(), rainDrops.end());
 
   sort(mDrops.begin(), mDrops.end(), compare);
+  std::cout << "mDrops Size:" + std::to_string(mDrops.size()) << std::endl;
 
   for(unsigned int i = 0; i < mDrops.size(); i++)
   {
