@@ -36,13 +36,8 @@ void RainDrops::init()
   mSurface = cairo_image_surface_create_for_data(mCanvas, CAIRO_FORMAT_ARGB32, mWidth, mHeight, mWidth * COLORDEPTH);
   mCtx     = cairo_create(mSurface);
 
-  // //----for PNG file------------
+  //----for PNG file------------
   mPngIndex = 0;
-  // mPngCanvas  = new unsigned char[mWidth * mHeight * COLORDEPTH];
-  // memset(mPngCanvas, mWidth * mHeight * COLORDEPTH, sizeof(unsigned char));
-  // mPngSurface = cairo_image_surface_create_for_data(mPngCanvas, CAIRO_FORMAT_ARGB32, mWidth, mHeight, mWidth * COLORDEPTH);
-  // mPngCtx     = cairo_create(mPngSurface);
-  // //----------------
 
   mDropletsCanvas = new unsigned char[mWidth * mHeight * COLORDEPTH];
   memset(mDropletsCanvas, mWidth * mHeight * COLORDEPTH, sizeof(unsigned char));
@@ -86,7 +81,6 @@ void RainDrops::renderDropsGfx()
     // color
     cairo_save(dropBufferCtx);
     cairo_set_operator(dropBufferCtx, CAIRO_OPERATOR_OVER);
-    // TODO:
     cairo_scale(dropBufferCtx, 0.5, 0.5);
     cairo_set_source_surface(dropBufferCtx, mDropColor, 0, 0);
     cairo_paint(dropBufferCtx);
@@ -109,7 +103,7 @@ void RainDrops::renderDropsGfx()
     cairo_paint(dropCtx);
     // string tempStr = "alphaC" + std::to_string(i) + ".png";
     // cairo_surface_write_to_png(dropSurface, tempStr.c_str());
-    //
+
     cairo_set_operator(dropCtx, CAIRO_OPERATOR_OVER);
     cairo_scale(dropCtx, 0.5, 0.5);
     cairo_set_source_surface(dropCtx, mDropAlpha, 0, 0);
@@ -128,7 +122,6 @@ void RainDrops::renderDropsGfx()
     // cairo_surface_destroy(dropSurface);
 
     mDropsGfx.push_back(dropCanvas);
-    //TODO: this surface was already destroyed
     mDropsSurfaces.push_back(dropSurface);
   }
 
@@ -147,9 +140,6 @@ void RainDrops::renderDropsGfx()
   cairo_paint(mClearDropletsCtx);
   cairo_restore(mClearDropletsCtx);
 
-  //TODO: Check arc() between cairo_arc and arc(). In cairo the parameters are double.
-  //   void cairo_arc(cairo_t * cr, double xc, double yc, double radius, double angle1, double angle2);
-  //   clearDropletsCtx.arc(64, 64, 64, 0, Math.PI * 2);
   cairo_arc(mClearDropletsCtx, 64, 64, 64, 0, M_PI * 2);
   cairo_clip(mClearDropletsCtx);
   cairo_new_path(mClearDropletsCtx);
@@ -253,20 +243,15 @@ void RainDrops::drawDrop(cairo_t* ctx, Drop* drop)
     // TODO: Check globalAlpha meaning.
     cairo_save(ctx);
     cairo_set_operator(ctx, CAIRO_OPERATOR_OVER);
-    //TODO: Check How to set(scale) image size
-    // void cairo_set_source_surface(cairo_t * cr, cairo_surface_t * surface, double x, double y);
 
-    // BUG:
     int w = cairo_image_surface_get_width(mDropsSurfaces[d]);
     int h = cairo_image_surface_get_height(mDropsSurfaces[d]);
     // int w = DROPSIZE;
     // int h = DROPSIZE;
-    cairo_scale(ctx, ((r * 2 * scaleX * (spreadX + 1)) * mScale) / w, ((r * 2 * scaleY * (spreadY + 1)) * mScale) / h);
-
-    // TODO:check x, y
     std::cout << "drawDrop x:" << x << ", y:" << y << ",r:" << r << std::endl;
-    cairo_set_source_surface(ctx, mDropsSurfaces[d], x, y);
-    // cairo_set_source_surface(ctx, mDropsSurfaces[d], ((x - (r * scaleX * (spreadX + 1))) * mScale), ((y - (r * scaleY * (spreadY + 1))) * mScale));
+    cairo_translate(ctx, ((x - (r * scaleX * (spreadX + 1))) * mScale), ((y - (r * scaleY * (spreadY + 1))) * mScale));
+    cairo_scale(ctx, ((r * 2 * scaleX * (spreadX + 1)) * mScale) / w, ((r * 2 * scaleY * (spreadY + 1)) * mScale) / h);
+    cairo_set_source_surface(ctx, mDropsSurfaces[d], 0, 0);
     cairo_paint_with_alpha(ctx, 1);
     cairo_restore(ctx);
   }
@@ -278,8 +263,9 @@ void RainDrops::clearDroplets(double x, double y, double r)
   cairo_set_operator(mDropletsCtx, CAIRO_OPERATOR_DEST_OUT);
   int w = cairo_image_surface_get_width(mClearDropletsSurface);
   int h = cairo_image_surface_get_width(mClearDropletsSurface);
+  cairo_translate(mDropletsCtx, ((x - r) * mDropletsPixelDensity * mScale), ((y - r) * mDropletsPixelDensity * mScale));
   cairo_scale(mDropletsCtx, ((r * 2) * mDropletsPixelDensity * mScale) / w, ((r * 2) * mDropletsPixelDensity * mScale * 1.5) / h);
-  cairo_set_source_surface(mDropletsCtx, mClearDropletsSurface, ((x - r) * mDropletsPixelDensity * mScale), ((y - r) * mDropletsPixelDensity * mScale));
+  cairo_set_source_surface(mDropletsCtx, mClearDropletsSurface, 0, 0);
   cairo_paint(mDropletsCtx);
   cairo_restore(mDropletsCtx);
 }
@@ -558,10 +544,10 @@ void RainDrops::update()
 
   mPngIndex++;
   std::cout << mPngIndex << std::endl;
-  string dropletStr = "droplets" + std::to_string(mPngIndex) + ".png";
-  cairo_save(mDropletsCtx);
-  cairo_surface_write_to_png(mDropletsSurface, dropletStr.c_str());
-  cairo_restore(mDropletsCtx);
+  // string dropletStr = "droplets" + std::to_string(mPngIndex) + ".png";
+  // cairo_save(mDropletsCtx);
+  // cairo_surface_write_to_png(mDropletsSurface, dropletStr.c_str());
+  // cairo_restore(mDropletsCtx);
 
   string str = "canvas" + std::to_string(mPngIndex) + ".png";
   cairo_save(mCtx);
