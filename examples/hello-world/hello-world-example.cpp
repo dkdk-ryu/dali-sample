@@ -15,9 +15,10 @@
  *
  */
 #include <cairo.h>
-#include <iostream>
 #include <dali-toolkit/dali-toolkit.h>
+#include <iostream>
 #include "rain-drops.h"
+#include "rain-renderer.h"
 
 using namespace Dali;
 using Dali::Toolkit::TextLabel;
@@ -31,8 +32,9 @@ using Dali::Toolkit::TextLabel;
 class HelloWorldController : public ConnectionTracker
 {
 public:
-  RainDrops* mRainDrops;
-  Timer      mTimer;
+  RainDrops*    mRainDrops;
+  RainRenderer* mRainRenderer;
+  Timer         mTimer;
 
 public:
   HelloWorldController(Application& application)
@@ -69,6 +71,8 @@ public:
     options.collisionRadius          = 0.45;
     options.collisionBoostMultiplier = 0.28;
     mRainDrops                       = new RainDrops(1000, 1000, 1, options);
+
+    mRainRenderer = new RainRenderer();
 
     mTimer = Timer::New(100); // ms
     mTimer.TickSignal().Connect(this, &HelloWorldController::OnTimer);

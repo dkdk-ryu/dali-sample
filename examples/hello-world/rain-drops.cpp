@@ -549,8 +549,8 @@ void RainDrops::update()
   // cairo_surface_write_to_png(mDropletsSurface, dropletStr.c_str());
   // cairo_restore(mDropletsCtx);
 
-  string str = "canvas" + std::to_string(mPngIndex) + ".png";
-  cairo_save(mCtx);
-  cairo_surface_write_to_png(mSurface, str.c_str());
-  cairo_restore(mCtx);
+  // string str = "canvas" + std::to_string(mPngIndex) + ".png";
+  // cairo_save(mCtx);
+  // cairo_surface_write_to_png(mSurface, str.c_str());
+  // cairo_restore(mCtx);
 }

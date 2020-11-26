@@ -61,7 +61,8 @@ CONFIGURE_FILE( resources-location.in ${DEMO_SHARED}/resources-location.cpp )
 SET(PKG_LIST dali2-core
              dali2-adaptor
              dali2-toolkit
-             cairo)
+             cairo
+             glesv2)
 	     #dlog)
 #	     ecore
 #	     ecore-wayland
