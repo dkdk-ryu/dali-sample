@@ -8,8 +8,10 @@
 #include <cairo.h>
 #include <stdarg.h>
 
-#define WINDOW_WIDTH 1366
-#define WINDOW_HEIGHT 752
+// #define WINDOW_WIDTH 1366
+// #define WINDOW_HEIGHT 752
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 
 using namespace Dali;
 

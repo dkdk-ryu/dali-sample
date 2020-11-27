@@ -96,6 +96,7 @@ public:
   unsigned char* getCanvas();
 
 private:
+  void setupWeatherData();
   void          init();
   int           deltaR();
   double        area();
