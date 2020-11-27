@@ -1,6 +1,8 @@
 #include <GLES2/gl2.h>
 #include <dali-toolkit/dali-toolkit.h>
 #include <dali/devel-api/adaptor-framework/gl-window.h>
+#include "rain-drops.h"
+
 
 class RainRenderer
 {
@@ -18,6 +20,7 @@ private:
 
 private:
   Dali::GlWindow mGLWindow;
+  RainDrops* mRainDrops;
 
   GLuint programObject;
 

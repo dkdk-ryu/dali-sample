@@ -93,6 +93,7 @@ class RainDrops
 public:
   RainDrops(int width, int height, float scale, RainOptions options);
   void update();
+  unsigned char* getCanvas();
 
 private:
   void          init();

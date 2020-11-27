@@ -17,7 +17,7 @@
 #include <cairo.h>
 #include <dali-toolkit/dali-toolkit.h>
 #include <iostream>
-#include "rain-drops.h"
+// #include "rain-drops.h"
 #include "rain-renderer.h"
 
 using namespace Dali;
@@ -32,7 +32,7 @@ using Dali::Toolkit::TextLabel;
 class HelloWorldController : public ConnectionTracker
 {
 public:
-  RainDrops*    mRainDrops;
+  // RainDrops*    mRainDrops;
   RainRenderer* mRainRenderer;
   Timer         mTimer;
 
@@ -64,27 +64,27 @@ public:
     // Respond to key events
     window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
 
-    RainOptions options;
-    options.trailRate                = 1;
-    options.trailScaleRange[0]       = 0.2;
-    options.trailScaleRange[1]       = 0.45;
-    options.collisionRadius          = 0.45;
-    options.collisionBoostMultiplier = 0.28;
-    mRainDrops                       = new RainDrops(1000, 1000, 1, options);
+    // RainOptions options;
+    // options.trailRate                = 1;
+    // options.trailScaleRange[0]       = 0.2;
+    // options.trailScaleRange[1]       = 0.45;
+    // options.collisionRadius          = 0.45;
+    // options.collisionBoostMultiplier = 0.28;
+    // mRainDrops                       = new RainDrops(1000, 1000, 1, options);
 
     mRainRenderer = new RainRenderer();
 
-    mTimer = Timer::New(100); // ms
-    mTimer.TickSignal().Connect(this, &HelloWorldController::OnTimer);
-    mTimer.Start();
+    // mTimer = Timer::New(100); // ms
+    // mTimer.TickSignal().Connect(this, &HelloWorldController::OnTimer);
+    // mTimer.Start();
   }
 
-  bool OnTimer(void)
-  {
-    mRainDrops->update();
+  // bool OnTimer(void)
+  // {
+  //   mRainDrops->update();
 
-    return true;
-  }
+  //   return true;
+  // }
 
   bool OnTouch(Actor actor, const TouchEvent& touch)
   {

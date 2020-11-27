@@ -8,12 +8,12 @@
 #include <cairo.h>
 #include <stdarg.h>
 
-#define WINDOW_WIDTH 1858
-#define WINDOW_HEIGHT 977
+#define WINDOW_WIDTH 1366
+#define WINDOW_HEIGHT 752
 
 using namespace Dali;
 
-RainRenderer* gRainRenderer;
+RainRenderer *gRainRenderer;
 
 void initCallback()
 {
@@ -30,10 +30,10 @@ void terminateCallback()
   gRainRenderer->terminate_gl();
 }
 
-void esLogMessage(const char* formatStr, ...)
+void esLogMessage(const char *formatStr, ...)
 {
   va_list params;
-  char    buf[BUFSIZ];
+  char buf[BUFSIZ];
 
   va_start(params, formatStr);
   vsprintf(buf, formatStr, params);
@@ -47,15 +47,15 @@ void esLogMessage(const char* formatStr, ...)
   va_end(params);
 }
 
-GLuint esLoadShader(GLenum type, const char* shaderSrc)
+GLuint esLoadShader(GLenum type, const char *shaderSrc)
 {
   GLuint shader;
-  GLint  compiled;
+  GLint compiled;
 
   // Create the shader object
   shader = glCreateShader(type);
 
-  if(shader == 0)
+  if (shader == 0)
   {
     return 0;
   }
@@ -69,15 +69,15 @@ GLuint esLoadShader(GLenum type, const char* shaderSrc)
   // Check the compile status
   glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 
-  if(!compiled)
+  if (!compiled)
   {
     GLint infoLen = 0;
 
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 
-    if(infoLen > 1)
+    if (infoLen > 1)
     {
-      char* infoLog = (char*)malloc(sizeof(char) * infoLen);
+      char *infoLog = (char *)malloc(sizeof(char) * infoLen);
 
       glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
       esLogMessage("Error compiling shader:\n%s\n", infoLog);
@@ -92,24 +92,24 @@ GLuint esLoadShader(GLenum type, const char* shaderSrc)
   return shader;
 }
 
-GLuint esLoadProgram(const char* vertShaderSrc, const char* fragShaderSrc)
+GLuint esLoadProgram(const char *vertShaderSrc, const char *fragShaderSrc)
 {
   GLuint vertexShader;
   GLuint fragmentShader;
   GLuint programObject;
-  GLint  linked;
+  GLint linked;
 
   // Load the vertex/fragment shaders
   vertexShader = esLoadShader(GL_VERTEX_SHADER, vertShaderSrc);
 
-  if(vertexShader == 0)
+  if (vertexShader == 0)
   {
     return 0;
   }
 
   fragmentShader = esLoadShader(GL_FRAGMENT_SHADER, fragShaderSrc);
 
-  if(fragmentShader == 0)
+  if (fragmentShader == 0)
   {
     glDeleteShader(vertexShader);
     return 0;
@@ -118,7 +118,7 @@ GLuint esLoadProgram(const char* vertShaderSrc, const char* fragShaderSrc)
   // Create the program object
   programObject = glCreateProgram();
 
-  if(programObject == 0)
+  if (programObject == 0)
   {
     return 0;
   }
@@ -132,15 +132,15 @@ GLuint esLoadProgram(const char* vertShaderSrc, const char* fragShaderSrc)
   // Check the link status
   glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
 
-  if(!linked)
+  if (!linked)
   {
     GLint infoLen = 0;
 
     glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen);
 
-    if(infoLen > 1)
+    if (infoLen > 1)
     {
-      char* infoLog = (char*)malloc(sizeof(char) * infoLen);
+      char *infoLog = (char *)malloc(sizeof(char) * infoLen);
 
       glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
       esLogMessage("Error linking program:\n%s\n", infoLog);
@@ -171,16 +171,16 @@ void RainRenderer::initialize_gl()
 
   // Get the sampler location
   // samplerLoc = glGetUniformLocation ( programObject, "s_texture" );
-  waterMapLoc     = glGetUniformLocation(programObject, "u_waterMap");
+  waterMapLoc = glGetUniformLocation(programObject, "u_waterMap");
   textureShineLoc = glGetUniformLocation(programObject, "u_textureShine");
-  textureFgLoc    = glGetUniformLocation(programObject, "u_textureFg");
-  textureBgLoc    = glGetUniformLocation(programObject, "u_textureBg");
+  textureFgLoc = glGetUniformLocation(programObject, "u_textureFg");
+  textureBgLoc = glGetUniformLocation(programObject, "u_textureBg");
 
   // Load the texture
   // waterMapId = CreateSimpleTexture2D("canvas.png");
-  waterMapId     = CreateSimpleTexture2D("webcanvas2.png");
-  textureFgId    = CreateSimpleTexture2D("texture-rain-fg.png");
-  textureBgId    = CreateSimpleTexture2D("texture-rain-bg.png");
+  waterMapId = CreateSimpleTexture2D("webcanvas2.png");
+  textureFgId = CreateSimpleTexture2D("texture-rain-fg.png");
+  textureBgId = CreateSimpleTexture2D("texture-rain-bg.png");
   textureShineId = CreateShineTexture();
 
   getUniformLoc();
@@ -190,25 +190,27 @@ void RainRenderer::initialize_gl()
 
 void RainRenderer::renderFrame_gl()
 {
+  mRainDrops->update();
+
   GLfloat vVertices[] = {
-    -1.0f, 1.0f, 0.0f, // Position 0
-    0.0f,
-    0.0f, // TexCoord 0
-    -1.0f,
-    -1.0f,
-    0.0f, // Position 1
-    0.0f,
-    1.0f, // TexCoord 1
-    1.0f,
-    -1.0f,
-    0.0f, // Position 2
-    1.0f,
-    1.0f, // TexCoord 2
-    1.0f,
-    1.0f,
-    0.0f, // Position 3
-    1.0f,
-    0.0f // TexCoord 3
+      -1.0f, 1.0f, 0.0f, // Position 0
+      0.0f,
+      0.0f, // TexCoord 0
+      -1.0f,
+      -1.0f,
+      0.0f, // Position 1
+      0.0f,
+      1.0f, // TexCoord 1
+      1.0f,
+      -1.0f,
+      0.0f, // Position 2
+      1.0f,
+      1.0f, // TexCoord 2
+      1.0f,
+      1.0f,
+      0.0f, // Position 3
+      1.0f,
+      0.0f // TexCoord 3
   };
   GLushort indices[] = {0, 1, 2, 0, 2, 3};
 
@@ -232,6 +234,10 @@ void RainRenderer::renderFrame_gl()
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, waterMapId);
   glUniform1i(waterMapLoc, 0);
+
+  // glBindTexture(GL_TEXTURE_2D, waterMapId);
+  // Load the texture
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, mRainDrops->getCanvas());
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, textureShineId);
@@ -260,18 +266,18 @@ void RainRenderer::terminate_gl()
 
 void RainRenderer::getUniformLoc()
 {
-  u_resolution      = glGetUniformLocation(programObject, "u_resolution");
-  u_parallax        = glGetUniformLocation(programObject, "u_parallax");
-  u_parallaxFg      = glGetUniformLocation(programObject, "u_parallaxFg");
-  u_parallaxBg      = glGetUniformLocation(programObject, "u_parallaxBg");
-  u_textureRatio    = glGetUniformLocation(programObject, "u_textureRatio");
-  u_renderShine     = glGetUniformLocation(programObject, "u_renderShine");
-  u_renderShadow    = glGetUniformLocation(programObject, "u_renderShadow");
-  u_minRefraction   = glGetUniformLocation(programObject, "u_minRefraction");
+  u_resolution = glGetUniformLocation(programObject, "u_resolution");
+  u_parallax = glGetUniformLocation(programObject, "u_parallax");
+  u_parallaxFg = glGetUniformLocation(programObject, "u_parallaxFg");
+  u_parallaxBg = glGetUniformLocation(programObject, "u_parallaxBg");
+  u_textureRatio = glGetUniformLocation(programObject, "u_textureRatio");
+  u_renderShine = glGetUniformLocation(programObject, "u_renderShine");
+  u_renderShadow = glGetUniformLocation(programObject, "u_renderShadow");
+  u_minRefraction = glGetUniformLocation(programObject, "u_minRefraction");
   u_refractionDelta = glGetUniformLocation(programObject, "u_refractionDelta");
-  u_brightness      = glGetUniformLocation(programObject, "u_brightness");
-  u_alphaMultiply   = glGetUniformLocation(programObject, "u_alphaMultiply");
-  u_alphaSubtract   = glGetUniformLocation(programObject, "u_alphaSubtract");
+  u_brightness = glGetUniformLocation(programObject, "u_brightness");
+  u_alphaMultiply = glGetUniformLocation(programObject, "u_alphaMultiply");
+  u_alphaSubtract = glGetUniformLocation(programObject, "u_alphaSubtract");
 }
 
 void RainRenderer::setUniform()
@@ -290,15 +296,15 @@ void RainRenderer::setUniform()
   glUniform1f(u_alphaSubtract, 4);
 }
 
-GLuint RainRenderer::CreateSimpleTexture2D(char* filename)
+GLuint RainRenderer::CreateSimpleTexture2D(char *filename)
 {
   // Texture object handle
   GLuint textureId;
 
-  cairo_surface_t* cairoPng = cairo_image_surface_create_from_png(filename);
-  unsigned char*   mCanvas  = cairo_image_surface_get_data(cairoPng);
-  int              w        = cairo_image_surface_get_width(cairoPng);
-  int              h        = cairo_image_surface_get_height(cairoPng);
+  cairo_surface_t *cairoPng = cairo_image_surface_create_from_png(filename);
+  unsigned char *mCanvas = cairo_image_surface_get_data(cairoPng);
+  int w = cairo_image_surface_get_width(cairoPng);
+  int h = cairo_image_surface_get_height(cairoPng);
 
   // Use tightly packed data
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -356,8 +362,17 @@ GLuint RainRenderer::CreateShineTexture()
 
 RainRenderer::RainRenderer()
 {
+
+  RainOptions options;
+  options.trailRate = 1;
+  options.trailScaleRange[0] = 0.2;
+  options.trailScaleRange[1] = 0.45;
+  options.collisionRadius = 0.45;
+  options.collisionBoostMultiplier = 0.28;
+  mRainDrops = new RainDrops(WINDOW_WIDTH, WINDOW_HEIGHT, 1, options);
+
   gRainRenderer = this;
-  mGLWindow     = Dali::GlWindow::New(PositionSize(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), "GLWindow", "", false);
+  mGLWindow = Dali::GlWindow::New(PositionSize(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), "GLWindow", "", false);
   mGLWindow.SetEglConfig(true, true, 0, Dali::GlWindow::GlesVersion::VERSION_3_0);
   mGLWindow.RegisterGlCallback(initCallback, renderCallback, terminateCallback);
 

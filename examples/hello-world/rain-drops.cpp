@@ -8,20 +8,20 @@
 using namespace chrono;
 
 const int COLORDEPTH = 4;
-const int DROPSIZE   = 64;
+const int DROPSIZE = 64;
 
-int    gWidth;
+int gWidth;
 double gScale;
 
 RainDrops::RainDrops(int width, int height, float scale, RainOptions options)
-: mWidth(width),
-  mHeight(height),
-  mScale(scale),
-  mOptions(options),
-  mDropletsPixelDensity(1),
-  mDropletsCounter(0),
-  mTextureCleaningIterations(0),
-  mLastRenderTime(0)
+    : mWidth(width),
+      mHeight(height),
+      mScale(scale),
+      mOptions(options),
+      mDropletsPixelDensity(1),
+      mDropletsCounter(0),
+      mTextureCleaningIterations(0),
+      mLastRenderTime(0)
 {
   gWidth = width;
   gScale = scale;
@@ -34,7 +34,7 @@ void RainDrops::init()
   mCanvas = new unsigned char[mWidth * mHeight * COLORDEPTH];
   memset(mCanvas, mWidth * mHeight * COLORDEPTH, sizeof(unsigned char));
   mSurface = cairo_image_surface_create_for_data(mCanvas, CAIRO_FORMAT_ARGB32, mWidth, mHeight, mWidth * COLORDEPTH);
-  mCtx     = cairo_create(mSurface);
+  mCtx = cairo_create(mSurface);
 
   //----for PNG file------------
   mPngIndex = 0;
@@ -42,7 +42,7 @@ void RainDrops::init()
   mDropletsCanvas = new unsigned char[mWidth * mHeight * COLORDEPTH];
   memset(mDropletsCanvas, mWidth * mHeight * COLORDEPTH, sizeof(unsigned char));
   mDropletsSurface = cairo_image_surface_create_for_data(mDropletsCanvas, CAIRO_FORMAT_ARGB32, mWidth, mHeight, mWidth * COLORDEPTH);
-  mDropletsCtx     = cairo_create(mDropletsSurface);
+  mDropletsCtx = cairo_create(mDropletsSurface);
 
   mDropColor = cairo_image_surface_create_from_png("drop-color.png");
   mDropAlpha = cairo_image_surface_create_from_png("drop-alpha.png");
@@ -59,16 +59,16 @@ void RainDrops::renderDropsGfx()
   // HTML canvas : RGBA
   // cairo surface : ARGB
   // clearRect(): transparent black : rgba(0,0,0,0)
-  unsigned char    dropBufferCanvas[DROPSIZE * DROPSIZE * COLORDEPTH];
-  cairo_surface_t* dropBufferSurface = cairo_image_surface_create_for_data(dropBufferCanvas, CAIRO_FORMAT_ARGB32, DROPSIZE, DROPSIZE, DROPSIZE * COLORDEPTH);
-  cairo_t*         dropBufferCtx     = cairo_create(dropBufferSurface);
+  unsigned char dropBufferCanvas[DROPSIZE * DROPSIZE * COLORDEPTH];
+  cairo_surface_t *dropBufferSurface = cairo_image_surface_create_for_data(dropBufferCanvas, CAIRO_FORMAT_ARGB32, DROPSIZE, DROPSIZE, DROPSIZE * COLORDEPTH);
+  cairo_t *dropBufferCtx = cairo_create(dropBufferSurface);
 
-  for(int i = 0; i < 255; i++)
+  for (int i = 0; i < 255; i++)
   {
-    unsigned char*   dropCanvas  = new unsigned char[DROPSIZE * DROPSIZE * COLORDEPTH];
-    cairo_surface_t* dropSurface = cairo_image_surface_create_for_data(dropCanvas, CAIRO_FORMAT_ARGB32, DROPSIZE, DROPSIZE, DROPSIZE * COLORDEPTH);
-    cairo_t*         dropCtx     = cairo_create(dropSurface);
-    cairo_status_t   status;
+    unsigned char *dropCanvas = new unsigned char[DROPSIZE * DROPSIZE * COLORDEPTH];
+    cairo_surface_t *dropSurface = cairo_image_surface_create_for_data(dropCanvas, CAIRO_FORMAT_ARGB32, DROPSIZE, DROPSIZE, DROPSIZE * COLORDEPTH);
+    cairo_t *dropCtx = cairo_create(dropSurface);
+    cairo_status_t status;
 
     //Clear dropBuffer
     cairo_save(dropBufferCtx);
@@ -129,9 +129,9 @@ void RainDrops::renderDropsGfx()
   cairo_surface_destroy(dropBufferSurface);
 
   // create circle that will be used as a brush to remove droplets
-  mClearDropletsGfx     = new unsigned char[128 * 128 * COLORDEPTH];
+  mClearDropletsGfx = new unsigned char[128 * 128 * COLORDEPTH];
   mClearDropletsSurface = cairo_image_surface_create_for_data(mClearDropletsGfx, CAIRO_FORMAT_ARGB32, 128, 128, 128 * COLORDEPTH);
-  mClearDropletsCtx     = cairo_create(mClearDropletsSurface);
+  mClearDropletsCtx = cairo_create(mClearDropletsSurface);
 
   //Clear
   cairo_save(mClearDropletsCtx);
@@ -180,23 +180,23 @@ double RainDrops::random(double from, double to, unsigned char interpolationType
 {
   //TODO: check double 0
   // TODO: check type all case
-  if(from == 0)
+  if (from == 0)
   {
     from = 0;
-    to   = 1;
+    to = 1;
   }
-  else if(from != 0 && to == 0)
+  else if (from != 0 && to == 0)
   {
-    to   = from;
+    to = from;
     from = 0;
   }
   double delta = to - from;
 
-  if(interpolationType == 1)
+  if (interpolationType == 1)
   { //n
     return from + (getRandom() * delta);
   }
-  else if(interpolationType == 2)
+  else if (interpolationType == 2)
   { //n^2
     double n = getRandom();
     return from + (pow(n, 2) * delta);
@@ -217,21 +217,21 @@ double RainDrops::getRandom()
 {
   std::random_device randDeivce;
   // std::mt19937 gen(randDeivce());
-  std::default_random_engine             randEngine{randDeivce()};
+  std::default_random_engine randEngine{randDeivce()};
   std::uniform_real_distribution<double> dist(0, 1);
 
   return dist(randEngine);
 }
 
-void RainDrops::drawDrop(cairo_t* ctx, Drop* drop)
+void RainDrops::drawDrop(cairo_t *ctx, Drop *drop)
 {
-  if(mDropsGfx.size() > 0)
+  if (mDropsGfx.size() > 0)
   {
-    double x       = drop->x;
-    double y       = drop->y;
-    double r       = drop->r;
-    int    spreadX = drop->spreadX;
-    int    spreadY = drop->spreadY;
+    double x = drop->x;
+    double y = drop->y;
+    double r = drop->r;
+    int spreadX = drop->spreadX;
+    int spreadY = drop->spreadY;
 
     double scaleX = 1;
     double scaleY = 1.5;
@@ -272,7 +272,7 @@ void RainDrops::clearDroplets(double x, double y, double r)
 
 void RainDrops::drawDroplet(int x, int y, double r)
 {
-  Drop* drop = new Drop();
+  Drop *drop = new Drop();
 
   // std::cout << "drawDroplet x:" << x << ", y:" << y << ",r:" << r << std::endl;
   drop->x = x * mDropletsPixelDensity;
@@ -283,7 +283,7 @@ void RainDrops::drawDroplet(int x, int y, double r)
 
 void RainDrops::updateDroplets(double timeScale)
 {
-  if(mTextureCleaningIterations > 0)
+  if (mTextureCleaningIterations > 0)
   {
     mTextureCleaningIterations -= 1 * timeScale;
 
@@ -296,11 +296,11 @@ void RainDrops::updateDroplets(double timeScale)
     cairo_restore(mDropletsCtx);
   }
 
-  if(mOptions.raining)
+  if (mOptions.raining)
   {
     mDropletsCounter += mOptions.dropletsRate * timeScale * areaMultiplier();
 
-    for(int i = 0; i < mDropletsCounter; i++)
+    for (int i = 0; i < mDropletsCounter; i++)
     {
       mDropletsCounter--;
       drawDroplet(random((double)mWidth / mScale, 0, 1),
@@ -315,29 +315,29 @@ void RainDrops::updateDroplets(double timeScale)
   cairo_restore(mCtx);
 }
 
-vector<Drop*> RainDrops::updateRain(double timeScale)
+vector<Drop *> RainDrops::updateRain(double timeScale)
 {
-  vector<Drop*> rainDrops;
+  vector<Drop *> rainDrops;
 
-  if(mOptions.raining)
+  if (mOptions.raining)
   {
     double limit = mOptions.rainLimit * timeScale * areaMultiplier();
-    int    count = 0;
-    while(chance(mOptions.rainChance * timeScale * areaMultiplier()) && count < limit)
+    int count = 0;
+    while (chance(mOptions.rainChance * timeScale * areaMultiplier()) && count < limit)
     {
       count++;
       double r = random(mOptions.minR, mOptions.maxR, 3);
 
       { //createDrop
-        if(mDrops.size() < mOptions.maxDrops * areaMultiplier())
+        if (mDrops.size() < mOptions.maxDrops * areaMultiplier())
         {
-          Drop* rainDrop     = new Drop();
-          rainDrop->x        = random(mWidth / mScale, 0, 1);
-          rainDrop->y        = random((mHeight / mScale) * mOptions.spawnArea[0], (mHeight / mScale) * mOptions.spawnArea[1], 1);
-          rainDrop->r        = r;
+          Drop *rainDrop = new Drop();
+          rainDrop->x = random(mWidth / mScale, 0, 1);
+          rainDrop->y = random((mHeight / mScale) * mOptions.spawnArea[0], (mHeight / mScale) * mOptions.spawnArea[1], 1);
+          rainDrop->r = r;
           rainDrop->momentum = 1 + ((r - mOptions.minR) * 0.1) + random(2, 0, 1);
-          rainDrop->spreadX  = 1.5;
-          rainDrop->spreadY  = 1.5;
+          rainDrop->spreadX = 1.5;
+          rainDrop->spreadY = 1.5;
           rainDrops.push_back(rainDrop);
         }
       }
@@ -347,7 +347,7 @@ vector<Drop*> RainDrops::updateRain(double timeScale)
   return rainDrops;
 }
 
-bool compare(Drop* a, Drop* b)
+bool compare(Drop *a, Drop *b)
 {
   // if(a.name == b.name)
   // { //이름이 같으면, 나이가 적은순
@@ -361,10 +361,10 @@ bool compare(Drop* a, Drop* b)
   // TODO: Can I use member variable?
   // TODO: equal?
   // return -1 is Okay?
-  int    width = gWidth;
+  int width = gWidth;
   double scale = gScale;
-  double va    = (a->y * (width / scale)) + a->x;
-  double vb    = (b->y * (width / scale)) + b->x;
+  double va = (a->y * (width / scale)) + a->x;
+  double vb = (b->y * (width / scale)) + b->x;
   // return va > vb ? 1 : va == vb ? 0 : -1;
   return va > vb ? true : false;
 
@@ -373,7 +373,7 @@ bool compare(Drop* a, Drop* b)
 
 void RainDrops::updateDrops(double timeScale)
 {
-  vector<Drop*> newDrops;
+  vector<Drop *> newDrops;
 
   updateDroplets(timeScale);
   // vector<Drop*> rainDrops = updateRain(timeScale);
@@ -385,40 +385,41 @@ void RainDrops::updateDrops(double timeScale)
   sort(mDrops.begin(), mDrops.end(), compare);
   std::cout << "mDrops Size:" + std::to_string(mDrops.size()) << std::endl;
 
-  for(unsigned int i = 0; i < mDrops.size(); i++)
+  for (unsigned int i = 0; i < mDrops.size(); i++)
   {
-    if(!mDrops[i]->killed)
+    if (!mDrops[i]->killed)
     {
       // update gravity
       // (chance of drops "creeping down")
-      if(chance((mDrops[i]->r - (mOptions.minR * mOptions.dropFallMultiplier)) * (0.1 / deltaR()) * timeScale))
+      if (chance((mDrops[i]->r - (mOptions.minR * mOptions.dropFallMultiplier)) * (0.1 / deltaR()) * timeScale))
       {
         mDrops[i]->momentum += random((mDrops[i]->r / mOptions.maxR) * 4, 0, 1);
       }
       // clean small drops
-      if(mOptions.autoShrink && mDrops[i]->r <= mOptions.minR && chance(0.05 * timeScale))
+      if (mOptions.autoShrink && mDrops[i]->r <= mOptions.minR && chance(0.05 * timeScale))
       {
         mDrops[i]->shrink += 0.01;
       }
       //update shrinkage
       mDrops[i]->r -= mDrops[i]->shrink * timeScale;
-      if(mDrops[i]->r <= 0) mDrops[i]->killed = true;
+      if (mDrops[i]->r <= 0)
+        mDrops[i]->killed = true;
 
       // update trails
-      if(mOptions.raining)
+      if (mOptions.raining)
       {
         mDrops[i]->lastSpawn += mDrops[i]->momentum * timeScale * mOptions.trailRate;
-        if(mDrops[i]->lastSpawn > mDrops[i]->nextSpawn)
+        if (mDrops[i]->lastSpawn > mDrops[i]->nextSpawn)
         {
           // CreateDrop
-          if(mDrops.size() < mOptions.maxDrops * areaMultiplier())
+          if (mDrops.size() < mOptions.maxDrops * areaMultiplier())
           {
-            Drop* trailDrop    = new Drop();
-            trailDrop->x       = mDrops[i]->x + (random(-mDrops[i]->r, mDrops[i]->r, 1) * 0.1);
-            trailDrop->y       = mDrops[i]->y - (mDrops[i]->r * 0.01);
-            trailDrop->r       = mDrops[i]->r * random(mOptions.trailScaleRange[0], mOptions.trailScaleRange[1], 1);
+            Drop *trailDrop = new Drop();
+            trailDrop->x = mDrops[i]->x + (random(-mDrops[i]->r, mDrops[i]->r, 1) * 0.1);
+            trailDrop->y = mDrops[i]->y - (mDrops[i]->r * 0.01);
+            trailDrop->r = mDrops[i]->r * random(mOptions.trailScaleRange[0], mOptions.trailScaleRange[1], 1);
             trailDrop->spreadY = mDrops[i]->momentum * 0.1;
-            trailDrop->parent  = mDrops[i];
+            trailDrop->parent = mDrops[i];
             newDrops.push_back(trailDrop);
 
             mDrops[i]->r *= pow(0.97, timeScale);
@@ -434,11 +435,11 @@ void RainDrops::updateDrops(double timeScale)
 
       //update position
       bool moved = mDrops[i]->momentum > 0;
-      if(moved && !mDrops[i]->killed)
+      if (moved && !mDrops[i]->killed)
       {
         mDrops[i]->y += mDrops[i]->momentum * mOptions.globalTimeScale;
         mDrops[i]->x += mDrops[i]->momentumX * mOptions.globalTimeScale;
-        if(mDrops[i]->y > (mHeight / mScale) + mDrops[i]->r)
+        if (mDrops[i]->y > (mHeight / mScale) + mDrops[i]->r)
         {
           mDrops[i]->killed = true;
         }
@@ -446,60 +447,62 @@ void RainDrops::updateDrops(double timeScale)
 
       // collision
       bool checkCollision = (moved || mDrops[i]->isNew) && !mDrops[i]->killed;
-      mDrops[i]->isNew    = false;
+      mDrops[i]->isNew = false;
 
-      if(checkCollision)
+      if (checkCollision)
       {
         // Example:
         // v2 = std::vector<int>(v1.begin() + 1, v1.end());
         //TODO: Check bound again
-        vector<Drop*>::iterator it        = mDrops.begin();
-        vector<Drop*>           tempDrops = vector<Drop*>(it + 1, (i + 70) >= mDrops.size() ? mDrops.end() : it + i + 70);
+        vector<Drop *>::iterator it = mDrops.begin();
+        vector<Drop *> tempDrops = vector<Drop *>(it + 1, (i + 70) >= mDrops.size() ? mDrops.end() : it + i + 70);
 
-        for(unsigned int j = 0; j < tempDrops.size(); j++)
+        for (unsigned int j = 0; j < tempDrops.size(); j++)
         {
-          if(mDrops[i] != tempDrops[j] &&
-             mDrops[i]->r > tempDrops[j]->r &&
-             mDrops[i]->parent != tempDrops[j] &&
-             tempDrops[j]->parent != mDrops[i] &&
-             !tempDrops[j]->killed)
+          if (mDrops[i] != tempDrops[j] &&
+              mDrops[i]->r > tempDrops[j]->r &&
+              mDrops[i]->parent != tempDrops[j] &&
+              tempDrops[j]->parent != mDrops[i] &&
+              !tempDrops[j]->killed)
           {
             double dx = tempDrops[j]->x - mDrops[i]->x;
             double dy = tempDrops[j]->y - mDrops[i]->y;
-            double d  = sqrt((dx * dx) + (dy * dy));
+            double d = sqrt((dx * dx) + (dy * dy));
             //if it's within acceptable distance
             // TODO: I can't find this.maxR. I used mOptions.maxR
-            if(d < (mDrops[i]->r + tempDrops[j]->r) * (mOptions.collisionRadius + (mDrops[i]->momentum * mOptions.collisionRadiusIncrease * timeScale)))
+            if (d < (mDrops[i]->r + tempDrops[j]->r) * (mOptions.collisionRadius + (mDrops[i]->momentum * mOptions.collisionRadiusIncrease * timeScale)))
             {
-              double pi      = M_PI;
-              double r1      = mDrops[i]->r;
-              double r2      = tempDrops[j]->r;
-              double a1      = pi * (r1 * r1);
-              double a2      = pi * (r2 * r2);
+              double pi = M_PI;
+              double r1 = mDrops[i]->r;
+              double r2 = tempDrops[j]->r;
+              double a1 = pi * (r1 * r1);
+              double a2 = pi * (r2 * r2);
               double targetR = sqrt((a1 + (a2 * 0.8)) / pi);
-              if(targetR > mOptions.maxR)
+              if (targetR > mOptions.maxR)
               {
                 targetR = mOptions.maxR;
               }
               mDrops[i]->r = targetR;
               mDrops[i]->momentumX += dx * 0.1;
-              mDrops[i]->spreadX   = 0;
-              mDrops[i]->spreadY   = 0;
+              mDrops[i]->spreadX = 0;
+              mDrops[i]->spreadY = 0;
               tempDrops[j]->killed = true;
-              mDrops[i]->momentum  = std::max((double)tempDrops[j]->momentum, std::min((double)40, mDrops[i]->momentum + (targetR * mOptions.collisionBoostMultiplier) + mOptions.collisionBoost));
+              mDrops[i]->momentum = std::max((double)tempDrops[j]->momentum, std::min((double)40, mDrops[i]->momentum + (targetR * mOptions.collisionBoostMultiplier) + mOptions.collisionBoost));
             }
           }
         }
 
         //slowdown momentum
         mDrops[i]->momentum -= std::max((double)1, (mOptions.minR * 0.5) - mDrops[i]->momentum) * 0.1 * timeScale;
-        if(mDrops[i]->momentum < 0) mDrops[i]->momentum = 0;
+        if (mDrops[i]->momentum < 0)
+          mDrops[i]->momentum = 0;
         mDrops[i]->momentumX *= pow(0.7, timeScale);
 
-        if(!mDrops[i]->killed)
+        if (!mDrops[i]->killed)
         {
           newDrops.push_back(mDrops[i]);
-          if(moved && mOptions.dropletsRate > 0) clearDroplets(mDrops[i]->x, mDrops[i]->y, mDrops[i]->r * mOptions.dropletsCleaningRadiusMultiplier);
+          if (moved && mOptions.dropletsRate > 0)
+            clearDroplets(mDrops[i]->x, mDrops[i]->y, mDrops[i]->r * mOptions.dropletsCleaningRadiusMultiplier);
           //check
           drawDrop(mCtx, mDrops[i]);
         }
@@ -507,10 +510,10 @@ void RainDrops::updateDrops(double timeScale)
     }
   }
 
-  vector<Drop*>::iterator it;
-  for(it = mDrops.begin(); it != mDrops.end(); ++it)
+  vector<Drop *>::iterator it;
+  for (it = mDrops.begin(); it != mDrops.end(); ++it)
   {
-    if((*it)->killed)
+    if ((*it)->killed)
     {
       delete *it;
     }
@@ -525,7 +528,7 @@ void RainDrops::update()
   // milliseconds now = duration_cast<milliseconds>(system_clock::now()).count();
   uint64_t now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
-  if(mLastRenderTime == 0)
+  if (mLastRenderTime == 0)
   {
     mLastRenderTime = now;
   }
@@ -533,7 +536,7 @@ void RainDrops::update()
   uint64_t deltaT = now - mLastRenderTime;
 
   double timeScale = deltaT / ((1. / 60) * 1000);
-  if(timeScale > 1.1)
+  if (timeScale > 1.1)
   {
     timeScale = 1.1;
   }
@@ -553,4 +556,9 @@ void RainDrops::update()
   // cairo_save(mCtx);
   // cairo_surface_write_to_png(mSurface, str.c_str());
   // cairo_restore(mCtx);
+}
+
+unsigned char *RainDrops::getCanvas()
+{
+  return mCanvas;
 }
