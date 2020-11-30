@@ -8,14 +8,19 @@
 #include <cairo.h>
 #include <stdarg.h>
 
-// #define WINDOW_WIDTH 1366
-// #define WINDOW_HEIGHT 752
+// #define WINDOW_WIDTH 720
+// #define WINDOW_HEIGHT 1280
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
 
 using namespace Dali;
 
 RainRenderer *gRainRenderer;
+
+void createInstance()
+{
+  new RainRenderer();
+}
 
 void initCallback()
 {
@@ -298,12 +303,12 @@ void RainRenderer::setUniform()
   glUniform1f(u_alphaSubtract, 4);
 }
 
-GLuint RainRenderer::CreateSimpleTexture2D(char *filename)
+// GLuint RainRenderer::CreateSimpleTexture2D(char *filename)
+GLuint RainRenderer::CreateSimpleTexture2D(string filename)
 {
   // Texture object handle
   GLuint textureId;
-
-  cairo_surface_t *cairoPng = cairo_image_surface_create_from_png(filename);
+  cairo_surface_t *cairoPng = cairo_image_surface_create_from_png(("/usr/apps/com.samsung.dali-demo/res/images/" + filename).c_str());
   unsigned char *mCanvas = cairo_image_surface_get_data(cairoPng);
   int w = cairo_image_surface_get_width(cairoPng);
   int h = cairo_image_surface_get_height(cairoPng);

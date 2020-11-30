@@ -13,7 +13,8 @@ public:
   void terminate_gl();
 
 private:
-  GLuint CreateSimpleTexture2D(char* filename);
+  // GLuint CreateSimpleTexture2D(char* filename);
+  GLuint CreateSimpleTexture2D(string filename);
   GLuint CreateShineTexture();
   void   getUniformLoc();
   void   setUniform();

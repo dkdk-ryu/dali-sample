@@ -50,19 +50,19 @@ public:
   void Create(Application& application)
   {
     // Get a handle to the window
-    Window window = application.GetWindow();
-    window.SetBackgroundColor(Color::WHITE);
+    // Window window = application.GetWindow();
+    // window.SetBackgroundColor(Color::WHITE);
 
-    TextLabel textLabel = TextLabel::New("Hello World");
-    textLabel.SetProperty(Actor::Property::ANCHOR_POINT, AnchorPoint::TOP_LEFT);
-    textLabel.SetProperty(Dali::Actor::Property::NAME, "helloWorldLabel");
-    window.Add(textLabel);
+    // TextLabel textLabel = TextLabel::New("Hello World");
+    // textLabel.SetProperty(Actor::Property::ANCHOR_POINT, AnchorPoint::TOP_LEFT);
+    // textLabel.SetProperty(Dali::Actor::Property::NAME, "helloWorldLabel");
+    // window.Add(textLabel);
 
-    // Respond to a touch anywhere on the window
-    window.GetRootLayer().TouchedSignal().Connect(this, &HelloWorldController::OnTouch);
+    // // Respond to a touch anywhere on the window
+    // window.GetRootLayer().TouchedSignal().Connect(this, &HelloWorldController::OnTouch);
 
-    // Respond to key events
-    window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
+    // // Respond to key events
+    // window.KeyEventSignal().Connect(this, &HelloWorldController::OnKeyEvent);
 
     // RainOptions options;
     // options.trailRate                = 1;
